@@ -1,16 +1,33 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Function for very long vectors, as it looks up in cache reducing time with long recomputinng. 
 
-## Write a short comment describing this function
+## This function includes functions used by cacheSolve to get or set inverted matrix in cache
 
 makeCacheMatrix <- function(x = matrix()) {
-
+            inv <- NULL
+            set <-function(A){
+              x <<- A
+              inv <- NULL
+            }
+            get <- function() x
+            setinverse <- function(inverse) inv <<- inverse
+            getinverse <- function() inv
+            list(set=set, get=get, setinverse=setinverse, getinverse=getinverse)
+  
 }
 
 
-## Write a short comment describing this function
+## This function calculates the inverse of a matrix in makeCashMatrix, if it exists in cash. 
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
+          inv <- x$getinverse()
+          if(!is.null(inv)){
+            message("getting cached data")
+            return(inv)
+          }
+          mtrxdata <- x$get
+          inv <- solve(mtrxdata,...)
+          x$setinverse(inv)
+          inv
 }
 ProgrammingAssignment2
